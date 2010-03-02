@@ -6,29 +6,29 @@ class Friendship < ActiveRecord::Base
   STATUS_FRIEND_IS_REQUIRED  = 4
   STATUS_FRIENDSHIP_ACCEPTED = 5
   STATUS_REQUESTED           = 6
-  
+
   # scopes
   named_scope :pending, :conditions => {:status => 'pending'}
   named_scope :accepted, :conditions => {:status => 'accepted'}
   named_scope :requested, :conditions => {:status => 'requested'}
-  
+
   # associations
   belongs_to :user
   belongs_to :friend, :class_name => 'User', :foreign_key => 'friend_id'
-  
+
   # callback
   after_destroy do |f|
-    User.decrement_counter(:friends_count, f.user_id)
+    User.decrement_counter(:friends_count, f.user_id) if f.status == 'accepted'
   end
-  
+
   def pending?
     status == 'pending'
   end
-  
+
   def accepted?
     status == 'accepted'
   end
-  
+
   def requested?
     status == 'requested'
   end
