@@ -33,6 +33,10 @@ class Friendship < ActiveRecord::Base
     status == 'requested'
   end
 
+  def ignore!
+    Friendship.delete_all(["(friend_id = ? AND user_id = ?) OR (user_id = ? AND friend_id = ?)", friend_id, user_id, friend_id, user_id] ) > 0
+  end
+
   def accept!
     User.increment_counter(:friends_count, user.id) unless accepted?
     update_attribute(:status, 'accepted')

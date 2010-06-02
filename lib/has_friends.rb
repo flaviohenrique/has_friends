@@ -58,15 +58,13 @@ module SimplesIdeias
 			end
 
 			def friendship_for(friend)
-				friendships.first :conditions => {:friend_id => friend.id}
+			  friend = friend.id if friend.is_a?(User)
+
+				friendships.first :conditions => {:friend_id => friend}
 			end
 
 			def is?(friend)
 				self.id == friend.id
-			end
-
-			def ignore(friend)
-				return ( Friendship.delete_all(["(friend_id = ? AND user_id = ?) OR (user_id = ? AND friend_id = ?)", friend.id, self.id, friend.id, self.id] ) > 0 )
 			end
 
 			private
