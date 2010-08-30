@@ -9,7 +9,7 @@ module SimplesIdeias
 				include SimplesIdeias::Friends::InstanceMethods
 
 				has_many :friendships
-				has_many :friends, :through => :friendships, :source => :friend, :conditions => "friendships.status = 'accepted'"
+				has_many :friends, :through => :friendships, :source => :friend, :conditions => "friendships.status = 'accepted' and users.status = 1"
 
 				after_destroy :destroy_all_friendships
 			end
@@ -75,3 +75,4 @@ module SimplesIdeias
 		end
 	end
 end
+

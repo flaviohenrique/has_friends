@@ -11,6 +11,9 @@ class Friendship < ActiveRecord::Base
   named_scope :pending, :conditions => {:status => 'pending'}
   named_scope :accepted, :conditions => {:status => 'accepted'}
   named_scope :requested, :conditions => {:status => 'requested'}
+  named_scope :by_user, lambda { |ids|
+    { :conditions => ["friend_id in (?)", ids] } unless ids.blank?
+  }
 
   # associations
   belongs_to :user
@@ -42,3 +45,4 @@ class Friendship < ActiveRecord::Base
     update_attribute(:status, 'accepted')
   end
 end
+
